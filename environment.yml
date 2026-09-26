@@ -1,0 +1,17 @@
+# Recreate with: conda env create -f environment.yml
+# Top-level specs from the nevaeh env (conda env export --from-history + pip inspect).
+name: endometriosis
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - vina=1.2.7
+  - openbabel=3.2.1
+  - rdkit=2026.03.1
+  - gemmi=0.7.5
+  - pandas=2.3.3
+  - scanpy=1.11.5
+  - pip
+  - pip:
+      - meeko==0.8.0
+      - liana==1.10.0
