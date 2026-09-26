@@ -11,6 +11,7 @@ dependencies:
   - gemmi=0.7.5
   - pandas=2.3.3
   - scanpy=1.11.5
+  - biopython=1.88
   - pip
   - pip:
       - meeko==0.8.0

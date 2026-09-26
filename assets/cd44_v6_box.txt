@@ -1,0 +1,8 @@
+
+# AutoDock Vina Grid Configuration for CD44v6
+center_x = -19.8665
+center_y = -39.1455
+center_z = -6.6005
+size_x = 31.6670
+size_y = 22.9760
+size_z = 22.0000

@@ -15,4 +15,4 @@ obabel "${root}/human_cd44_full.pdb" -O "${root}/cd44_cleaned.pdb" -d -h
 
 # Convert to PDBQT format for AutoDock Vina
 obabel "${root}/cd44_cleaned.pdb" -O "${root}/cd44_target.pdbqt" -xr --partialcharge gasteiger
-echo "conversion complete."
+echo "conversion complete."`
