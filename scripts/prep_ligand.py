@@ -2,26 +2,39 @@ from rdkit import Chem # type: ignore
 from rdkit.Chem import AllChem # type: ignore
 from meeko import MoleculePreparation, PDBQTWriterLegacy #type: ignore
 from pathlib import Path
+import argparse # smiles will come from command line
+import uuid # for unique ligand file name
 
-root_dir = Path(__file__).resolve().parent.parent
-asset_path = root_dir / "assets"
+def main():
+    parser = argparse.ArgumentParser(description="Prepare a ligand for docking.")
+    parser.add_argument("--smiles", type=str, required=True, help="SMILES string of the ligand.")
+    args = parser.parse_args()
 
-smiles = "O=C(O)c1ccc(N=Nc2ccc(S(=O)(=O)Nc3ccccn3)cc2)c(O)c1"
+    root_dir = Path(__file__).resolve().parent.parent
+    ligand_path = root_dir / "ligands"
+    if not ligand_path.exists():
+        ligand_path.mkdir(parents=True, exist_ok=True)
 
-molecule = Chem.MolFromSmiles(smiles)
-if molecule is None:
-    raise ValueError(f"Failed to parse SMILES string: {smiles}")
+    smiles = args.smiles
+    ligand_file = ligand_path / f"ligand_{uuid.uuid4()}.pdbqt"
 
-molecule = Chem.AddHs(molecule)
-AllChem.EmbedMolecule(molecule)
-AllChem.MMFFOptimizeMolecule(molecule)
+    molecule = Chem.MolFromSmiles(smiles)
+    if molecule is None:
+        raise ValueError(f"Failed to parse SMILES string: {smiles}")
 
-preparator = MoleculePreparation()
-mol_setups = preparator.prepare(molecule)
-writer = PDBQTWriterLegacy()
-pdbqt_string = writer.write_string(mol_setups[0])[0]
+    molecule = Chem.AddHs(molecule)
+    AllChem.EmbedMolecule(molecule)
+    AllChem.MMFFOptimizeMolecule(molecule)
 
-with open(asset_path / "ligand.pdbqt", "w") as f:
-    f.write(pdbqt_string)
+    preparator = MoleculePreparation()
+    mol_setups = preparator.prepare(molecule)
+    writer = PDBQTWriterLegacy()
+    pdbqt_string = writer.write_string(mol_setups[0])[0]
 
-print("Created test ligand file successfully.")
+    with open(ligand_file, "w") as f:
+        f.write(pdbqt_string)
+
+    print("Created test ligand file successfully.")
+
+if __name__ == "__main__":
+    main()
